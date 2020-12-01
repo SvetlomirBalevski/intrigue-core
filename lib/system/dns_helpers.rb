@@ -3,15 +3,14 @@ module Core
 module System
   module DnsHelpers
 
-    ###
-    ### TODO ... system helper 
+    ### Parse out a domain, given a domain or dns record.
     ###
     def parse_domain_name(record)
 
       # sanity check
-      return nil if record.is_ip_address?
       return nil unless record 
-
+      return nil if record.is_ip_address?
+      
       split_tld = parse_tld(record).split(".")
       if (split_tld.last == "com" || split_tld.last == "net") && split_tld.count > 1 # handle cases like amazonaws.com, netlify.com
         length = split_tld.count
@@ -22,9 +21,8 @@ module System
     record.split(".").last(length).join(".")
     end
 
-
-    ###
-    ### TODO ... system helper 
+    ### This helper parses out a tld, given a domain or dnsrecord. handy
+    ### in many contexts 
     ###
     # assumes we get a dns name of arbitrary length
     def parse_tld(record)

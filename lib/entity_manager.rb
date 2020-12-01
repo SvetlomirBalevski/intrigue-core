@@ -120,8 +120,6 @@ class EntityManager
     tr = Intrigue::Core::Model::TaskResult.first(:id => task_result_id)
     return nil unless tr
 
-    #puts "DEBUG CREATE ENTITY #{tr.name} #{type_string} #{name} #{details}"
-
     if tr.cancelled
       tr.log "Returning, task was cancelled"
       return nil
@@ -131,8 +129,8 @@ class EntityManager
     project = tr.project
 
     # Save the original and downcase our name
-    details["hidden_original"] = "#{name}"
-    downcased_name = "#{name}".downcase
+    details["hidden_original"] = "#{name}".strip
+    downcased_name = "#{name}".strip.downcase
 
     # Find the details if it already exists
     entity = entity_exists?(project,type_string,downcased_name)
@@ -205,14 +203,16 @@ class EntityManager
       unless entity.transform!
         tr.log_error "Transformation of entity failed: #{entity}, rolling back entity creation!!"
         entity.delete
-        raise "Invalid entity attempted: #{entity.type} #{entity.name}"
+        Intrigue::NotifierFactory.default.each { |x| 
+          x.notify("Invalid entity (transform) attempted: #{entity.type} #{entity.name} #{details}" , tr) }
       end
 
       ### Run Validation
       unless entity.validate_entity
         tr.log_error "Validation of entity failed: #{entity}, rolling back entity creation!!"
         entity.delete
-        raise "Invalid entity attempted: #{entity.type} #{entity.name}"
+        Intrigue::NotifierFactory.default.each { |x| 
+          x.notify("Invalid entity (validate) attempted: #{entity.type} #{entity.name} #{details}" , tr) }
       end
 
       # Add to our result set for this task

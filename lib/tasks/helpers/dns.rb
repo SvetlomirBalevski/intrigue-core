@@ -17,18 +17,19 @@ module Dns
     entity_details.merge!(more_deets)
 
     if s.is_ip_address?
-      _create_entity("IpAddress", entity_details, alias_entity)
+      e = _create_entity("IpAddress", entity_details, alias_entity)
     else
       
       # clean it up and create 
       entity_details["name"] = "#{s}".strip.gsub(/^\*\./,"").gsub(/\.$/,"")
       if entity_details["name"].split(".").length == 2
-        _create_entity "Domain", entity_details, alias_entity
+        e = _create_entity "Domain", entity_details, alias_entity
       else 
-        _create_entity "DnsRecord", entity_details, alias_entity
+        e = _create_entity "DnsRecord", entity_details, alias_entity
       end
 
     end
+  e
   end
 
   # Check for wildcard DNS
@@ -178,7 +179,6 @@ module Dns
         lookup_types.each do |t|
           Resolv::DNS.open() {|dns|
             dns.timeouts = 5
-
             resources.concat(dns.getresources(lookup_name, t)) 
           }
         end
@@ -404,11 +404,6 @@ module Dns
       end
     end
   txt_records.flatten.uniq
-  end
-
-  def collect_whois_data(lookup_name)
-      _log "Collecting Whois record"
-      whois(lookup_name)
   end
 
   def collect_resolutions(results)
