@@ -159,3 +159,12 @@ begin
 rescue LoadError => e 
   # unable to load gem, presumably unavailable
 end
+
+###
+# load zetalytics if available, fail silently if not
+###
+begin
+  require 'zetalytics'
+rescue LoadError => e 
+  # unable to load gem, presumably unavailable
+end

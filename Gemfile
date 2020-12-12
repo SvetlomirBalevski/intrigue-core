@@ -69,7 +69,7 @@ gem 'whois-parser'            # whois
 gem 'whoisology',             :git => 'https://github.com/pentestify/whoisology.git'
 gem 'open3'
 gem 'typhoeus'
-gem 'intrigue-search-zetalytics'
+gem 'zetalytics'            
 
 # comment if developing on chrome_remote locally
 gem 'chrome_remote',          :git => 'https://github.com/intrigueio/chrome_remote.git'
@@ -98,5 +98,5 @@ gem "sentry-raven"            # Error tracking (disabled by default)
 #gem 'chrome_remote',                 :path => "~/chrome_remote"
 #gem 'intrigue-ident',                :path => "~/intrigue-ident"
 #gem 'intrigue-ident-private',        :path => "~/intrigue-ident-private"
-#gem 'intrigue-core-private',         :path => "~/intrigue-core-private"
+gem 'intrigue-core-private',         :path => "/home/anas/Desktop/intrigue-core-private"
 #gem 'ruclei',                        :path => "~/ruclei"
